@@ -17,7 +17,7 @@
 
     <form action="index.html" method="post">
               
-      <fieldset>         
+      <fieldset id="basic-info">         
         <legend>Basic Info</legend>
         
         <label for="name">Name:</label>
@@ -34,8 +34,10 @@
           <option value="designer">Designer</option>          
           <option value="student">Student</option>
           <option value="other">Other</option>  
-        </select>           
+        </select>
+        <input type="text" class="is-hidden" id="other-title" placeholder="Your job role">  
       </fieldset>
+      
       
       <fieldset class="shirt">
         <legend>T-Shirt Info</legend>
