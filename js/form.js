@@ -5,6 +5,7 @@ const otherTitleInput = document.getElementById('other-title');
 const selectDesign = document.getElementById('design');
 const selectColor = document.getElementById('color');
 const colorOption = document.querySelectorAll('#color option');
+const colorDropdownMenu = document.getElementById('colors-js-puns');
 const punsOptionArray = [];
 const heartOptionArray = [];
 
@@ -16,10 +17,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     selectColorPlaceholder.selected = "selected";
     selectColorPlaceholder.className = "placeholder";
     selectColor.appendChild(selectColorPlaceholder);
-
     for(var i = 0; i < colorOption.length; i += 1) {
         colorOption[i].style.display = 'none';
     }
+    colorDropdownMenu.style.display = 'none';
 })
 
 for(var i = 0; i < colorOption.length; i += 1) {
@@ -44,7 +45,14 @@ selectTitle.addEventListener('change', (e) => {
 // Select color options
 selectDesign.addEventListener('click', (e) => {
     const selectedOption = e.target.selectedOptions[0].value;  
-    
+
+    // Dropdown color menu is shown when a design is selected
+    if(selectedOption === 'js puns' || selectedOption === 'heart js') {
+        colorDropdownMenu.style.display = "block";
+    } else {
+        colorDropdownMenu.style.display = "none";
+    }
+
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
     if(selectedOption === 'js puns') {
         for(var i = 0; i < punsOptionArray.length; i += 1) {
