@@ -3,9 +3,24 @@ const basicInfoFieldset = document.getElementById('basic-info');
 const selectTitle =  document.getElementById('title');
 const otherTitleInput = document.getElementById('other-title');
 const selectDesign = document.getElementById('design');
+const selectColor = document.getElementById('color');
 const colorOption = document.querySelectorAll('#color option');
 const punsOptionArray = [];
 const heartOptionArray = [];
+
+// On document fully loaded do what's below
+document.addEventListener("DOMContentLoaded", function(event) {
+    nameInput.focus();
+    const selectColorPlaceholder = document.createElement('option');
+    selectColorPlaceholder.textContent = "Please select a T-shirt theme";
+    selectColorPlaceholder.selected = "selected";
+    selectColorPlaceholder.className = "placeholder";
+    selectColor.appendChild(selectColorPlaceholder);
+
+    for(var i = 0; i < colorOption.length; i += 1) {
+        colorOption[i].style.display = 'none';
+    }
+})
 
 for(var i = 0; i < colorOption.length; i += 1) {
     if(colorOption[i].textContent.includes('JS Puns')) {
@@ -14,12 +29,6 @@ for(var i = 0; i < colorOption.length; i += 1) {
         heartOptionArray.push(colorOption[i]);
     }
 }
-
-
-// On document fully loaded do what's below
-document.addEventListener("DOMContentLoaded", function(event) {
-    nameInput.focus();
-})
 
 // Check change on title select input
 selectTitle.addEventListener('change', (e) => {
@@ -56,6 +65,11 @@ selectDesign.addEventListener('click', (e) => {
         for(var i = 0; i < heartOptionArray.length; i += 1) {
             heartOptionArray[i].style.display = 'none';
         }
+    }
+
+    if(e.target.selectedOptions[0].textContent === "Select Theme") {
+        const selectColorPlaceholder = document.querySelector(".placeholder");
+        selectColorPlaceholder.selected = true;
     }
 });
 
