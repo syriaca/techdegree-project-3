@@ -8,6 +8,8 @@ const colorOption = document.querySelectorAll('#color option');
 const colorDropdownMenu = document.getElementById('colors-js-puns');
 const punsOptionArray = [];
 const heartOptionArray = [];
+const activities = document.querySelectorAll('.activities label');
+const activitiesArray = [];
 
 // On document fully loaded do what's below
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -21,6 +23,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
         colorOption[i].style.display = 'none';
     }
     colorDropdownMenu.style.display = 'none';
+
+    for(var i = 0; i < activities.length; i += 1) {
+        let activity = activities[i].textContent;
+        let activitiesCheckbox = activities[i].getElementsByTagName("input")[0];
+        let activityName = activity.match(/(?:[^\—]*)/i);
+        let activityDay = activity.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i);
+        let activityBeginningHour = activity.match(/(.am-)/ig);
+        let activityEndingHour = activity.match();
+        let activityPrice = activity.match(/(?:[^\$]*)$/i);
+        if(activityDay === null && activityBeginningHour === null) {
+            activityDay = "";
+        }
+        activitiesArray.push({
+            checkboxName: activitiesCheckbox.name,
+            conferenceName: activityName[0],
+            day: activityDay[0],
+            
+            ending: activityEndingHour[0],
+            price: activityPrice[0]
+        });      
+        console.log(activityBeginningHour)
+
+    }
+    console.log(activitiesArray)
+
+
 })
 
 for(var i = 0; i < colorOption.length; i += 1) {
