@@ -9,7 +9,15 @@ const colorDropdownMenu = document.getElementById('colors-js-puns');
 const punsOptionArray = [];
 const heartOptionArray = [];
 const activities = document.querySelectorAll('.activities label');
-const activitiesArray = [];
+const activitiesCheckboxes = document.querySelectorAll('.activities input[type="checkbox"]');
+const checkedBoxes = [];
+
+// Regular expression
+const activityNameRegEx = /(?:[^\—]*)/ig;
+const activityDayRegEx = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/ig;
+const activityStartingHourRegEx = /(.am-)/ig;
+const activityEndingHourRegEx = /(-.*\pm)/ig;
+const activityPriceRegEx = /(?:[^\$]*)$/ig;
 
 // On document fully loaded do what's below
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -23,33 +31,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
         colorOption[i].style.display = 'none';
     }
     colorDropdownMenu.style.display = 'none';
-
-    for(var i = 0; i < activities.length; i += 1) {
-        let activity = activities[i].textContent;
-        let activitiesCheckbox = activities[i].getElementsByTagName("input")[0];
-        let activityName = activity.match(/(?:[^\—]*)/i);
-        let activityDay = activity.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i);
-        let activityBeginningHour = activity.match(/(.am-)/ig);
-        let activityEndingHour = activity.match();
-        let activityPrice = activity.match(/(?:[^\$]*)$/i);
-        if(activityDay === null && activityBeginningHour === null) {
-            activityDay = "";
-        }
-        activitiesArray.push({
-            checkboxName: activitiesCheckbox.name,
-            conferenceName: activityName[0],
-            day: activityDay[0],
-            
-            ending: activityEndingHour[0],
-            price: activityPrice[0]
-        });      
-        console.log(activityBeginningHour)
-
-    }
-    console.log(activitiesArray)
-
-
 })
+
+for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
+    activitiesCheckboxes[i].addEventListener("click", (e) => {
+        let activityText = e.target.parentNode.textContent;
+        let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx) : "";
+        let activityDay =  activityDayRegEx.test(activityText) ? activityText.match(activityDayRegEx) : "";
+        let activityStartingHour = activityStartingHourRegEx.test(activityText) ? activityText.match(activityStartingHourRegEx) : "";
+        let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx) : "";
+        let activityPrice = activityPriceRegEx.test(activityText) ? activityText.match(activityPriceRegEx) : "";
+
+    console.log(e.target);
+
+        if(e.target.checked) {
+            checkedBoxes.push(activityText);
+        }
+
+        console.log(checkedBoxes);
+    });
+};
 
 for(var i = 0; i < colorOption.length; i += 1) {
     if(colorOption[i].textContent.includes('JS Puns')) {
