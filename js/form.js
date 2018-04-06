@@ -8,14 +8,16 @@ const colorOption = document.querySelectorAll('#color option');
 const colorDropdownMenu = document.getElementById('colors-js-puns');
 const punsOptionArray = [];
 const heartOptionArray = [];
-const activities = document.querySelectorAll('.activities label');
+const activitiesFieldset = document.querySelector('.activities');
+const activitiesLabel = document.querySelectorAll('.activities label');
 const activitiesCheckboxes = document.querySelectorAll('.activities input[type="checkbox"]');
 const checkedBoxes = [];
+let total = 0;
 
 // Regular expression
 const activityNameRegEx = /(?:[^\—]*)/ig;
 const activityDayRegEx = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/ig;
-const activityStartingHourRegEx = /(.am-)/ig;
+const activityStartingHourRegEx = /(.am-)|(.pm-)/ig;
 const activityEndingHourRegEx = /(-.*\pm)/ig;
 const activityPriceRegEx = /(?:[^\$]*)$/ig;
 
@@ -33,22 +35,62 @@ document.addEventListener("DOMContentLoaded", function(event) {
     colorDropdownMenu.style.display = 'none';
 })
 
-for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
-    activitiesCheckboxes[i].addEventListener("click", (e) => {
-        let activityText = e.target.parentNode.textContent;
-        let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx) : "";
-        let activityDay =  activityDayRegEx.test(activityText) ? activityText.match(activityDayRegEx) : "";
-        let activityStartingHour = activityStartingHourRegEx.test(activityText) ? activityText.match(activityStartingHourRegEx) : "";
-        let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx) : "";
-        let activityPrice = activityPriceRegEx.test(activityText) ? activityText.match(activityPriceRegEx) : "";
+function pricingDiv (total) {
+    let pricingDivHtml = "";
+    pricingDivHtml = document.createElement("div");
+    pricingDivHtml.id = "totalPrice";
+    let pricingDivHtmlSpan = document.createElement("strong");
+    pricingDivHtmlSpan.id = "totalPriceAmount";
+    pricingDivHtml.appendChild(pricingDivHtmlSpan);
+    pricingDivHtmlSpan.textContent = "Total: $"+total;  
+ 
+    if(total > 0) {
+        if (!document.getElementById("totalPrice")) {        
+            activitiesFieldset.appendChild(pricingDivHtml);
+        } else {
+            document.getElementById("totalPriceAmount").textContent = "Total: $"+total;            
+        }
+    } else {
+        activitiesFieldset.removeChild(document.getElementById("totalPrice"));
+    }
+}
 
-    console.log(e.target);
+function add(number) {
+    total += number;
+    return pricingDiv(total);
+ }
+ 
+ function substract(number) {
+     total -= number;
+     return pricingDiv(total);
+ }
+
+for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
+    activitiesCheckboxes[i].addEventListener("change", (e) => {
+        let activityText = e.target.parentNode.textContent;
+        let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx).toString() : "";
+        let activityDay =  activityDayRegEx.test(activityText) ? activityText.match(activityDayRegEx).toString() : "";
+        let activityStartingHour = activityStartingHourRegEx.test(activityText) ? activityText.match(activityStartingHourRegEx).toString() : "";
+        let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx).toString() : "";
+        let activityPrice = activityPriceRegEx.test(activityText) ? parseInt(activityText.match(activityPriceRegEx)) : "";
 
         if(e.target.checked) {
-            checkedBoxes.push(activityText);
+            for(var i = 0; i < activitiesLabel.length; i += 1) {
+                if(activitiesLabel[i].textContent.includes(activityStartingHour) && activityStartingHour != ""){
+                        activitiesLabel[i].firstChild.disabled = true;
+                        activitiesLabel[i].style.color = "gray";
+                        e.target.disabled = false;
+                        e.target.parentNode.style.color = "";
+                }
+            }
+            add(activityPrice);
+        } else {
+            for(var i = 0; i < activitiesLabel.length; i += 1) {
+                activitiesLabel[i].style.color = "";
+                activitiesLabel[i].firstChild.disabled = false;
+            }
+            substract(activityPrice);
         }
-
-        console.log(checkedBoxes);
     });
 };
 
