@@ -5,6 +5,10 @@ const otherTitleInput = document.getElementById('other-title');
 const selectDesign = document.getElementById('design');
 const selectColor = document.getElementById('color');
 const colorOption = document.querySelectorAll('#color option');
+const paymentSelect = document.getElementById('payment');
+const paypalDisclaimer = document.getElementById('paypal');
+const bitcoinDisclaimer = document.getElementById('bitcoin');
+const creditCardForm = document.getElementById('credit-card');
 const colorDropdownMenu = document.getElementById('colors-js-puns');
 const punsOptionArray = [];
 const heartOptionArray = [];
@@ -22,37 +26,46 @@ const activityEndingHourRegEx = /(-.*\pm)/ig;
 const activityPriceRegEx = /(?:[^\$]*)$/ig;
 
 // On document fully loaded do what's below
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener('DOMContentLoaded', function(event) {
     nameInput.focus();
     const selectColorPlaceholder = document.createElement('option');
-    selectColorPlaceholder.textContent = "Please select a T-shirt theme";
-    selectColorPlaceholder.selected = "selected";
-    selectColorPlaceholder.className = "placeholder";
+    selectColorPlaceholder.textContent = 'Please select a T-shirt theme';
+    selectColorPlaceholder.selected = 'selected';
+    selectColorPlaceholder.className = 'placeholder';
     selectColor.appendChild(selectColorPlaceholder);
     for(var i = 0; i < colorOption.length; i += 1) {
         colorOption[i].style.display = 'none';
     }
     colorDropdownMenu.style.display = 'none';
+    paypalDisclaimer.style.display = 'none';
+    bitcoinDisclaimer.style.display = 'none';
 })
 
 function pricingDiv (total) {
-    let pricingDivHtml = "";
-    pricingDivHtml = document.createElement("div");
-    pricingDivHtml.id = "totalPrice";
-    let pricingDivHtmlSpan = document.createElement("strong");
-    pricingDivHtmlSpan.id = "totalPriceAmount";
+    let pricingDivHtml = '';
+    pricingDivHtml = document.createElement('div');
+    pricingDivHtml.id = 'totalPrice';
+    let pricingDivHtmlSpan = document.createElement('strong');
+    pricingDivHtmlSpan.id = 'totalPriceAmount';
     pricingDivHtml.appendChild(pricingDivHtmlSpan);
-    pricingDivHtmlSpan.textContent = "Total: $"+total;  
+    pricingDivHtmlSpan.textContent = 'Total: $'+total;  
  
     if(total > 0) {
-        if (!document.getElementById("totalPrice")) {        
+        if (!document.getElementById('totalPrice')) {        
             activitiesFieldset.appendChild(pricingDivHtml);
         } else {
-            document.getElementById("totalPriceAmount").textContent = "Total: $"+total;            
+            document.getElementById('totalPriceAmount').textContent = 'Total: $'+total;            
         }
     } else {
-        activitiesFieldset.removeChild(document.getElementById("totalPrice"));
+        activitiesFieldset.removeChild(document.getElementById('totalPrice'));
     }
+}
+
+function paymentDiv(paymentOption){
+    let paymentDivHtml = '';
+    paymentDivHtml = document.createElement('div');
+    paymentDivHtml.id = 'totalPrice';
+
 }
 
 function add(number) {
@@ -66,27 +79,27 @@ function add(number) {
  }
 
 for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
-    activitiesCheckboxes[i].addEventListener("change", (e) => {
+    activitiesCheckboxes[i].addEventListener('change', (e) => {
         let activityText = e.target.parentNode.textContent;
-        let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx).toString() : "";
-        let activityDay =  activityDayRegEx.test(activityText) ? activityText.match(activityDayRegEx).toString() : "";
-        let activityStartingHour = activityStartingHourRegEx.test(activityText) ? activityText.match(activityStartingHourRegEx).toString() : "";
-        let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx).toString() : "";
-        let activityPrice = activityPriceRegEx.test(activityText) ? parseInt(activityText.match(activityPriceRegEx)) : "";
+        let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx).toString() : '';
+        let activityDay =  activityDayRegEx.test(activityText) ? activityText.match(activityDayRegEx).toString() : '';
+        let activityStartingHour = activityStartingHourRegEx.test(activityText) ? activityText.match(activityStartingHourRegEx).toString() : '';
+        let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx).toString() : '';
+        let activityPrice = activityPriceRegEx.test(activityText) ? parseInt(activityText.match(activityPriceRegEx)) : '';
 
         if(e.target.checked) {
             for(var i = 0; i < activitiesLabel.length; i += 1) {
                 if(activitiesLabel[i].textContent.includes(activityStartingHour) && activityStartingHour != ""){
                         activitiesLabel[i].firstChild.disabled = true;
-                        activitiesLabel[i].style.color = "gray";
+                        activitiesLabel[i].style.color = 'gray';
                         e.target.disabled = false;
-                        e.target.parentNode.style.color = "";
+                        e.target.parentNode.style.color = '';
                 }
             }
             add(activityPrice);
         } else {
             for(var i = 0; i < activitiesLabel.length; i += 1) {
-                activitiesLabel[i].style.color = "";
+                activitiesLabel[i].style.color = '';
                 activitiesLabel[i].firstChild.disabled = false;
             }
             substract(activityPrice);
@@ -119,9 +132,9 @@ selectDesign.addEventListener('click', (e) => {
 
     // Dropdown color menu is shown when a design is selected
     if(selectedOption === 'js puns' || selectedOption === 'heart js') {
-        colorDropdownMenu.style.display = "block";
+        colorDropdownMenu.style.display = 'block';
     } else {
-        colorDropdownMenu.style.display = "none";
+        colorDropdownMenu.style.display = 'none';
     }
 
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
@@ -152,7 +165,28 @@ selectDesign.addEventListener('click', (e) => {
     }
 });
 
+// Display payment sections based on the payment option chosen in the select menu
+paymentSelect.addEventListener("change", (e) => {
+    let option = e.target.value;
+    switch(option) {
+        case "paypal" :
+            creditCardForm.style.display = 'none';
+            paypalDisclaimer.style.display = 'block';
+            break;
 
+        case "bitcoin" :
+            creditCardForm.style.display = 'none';
+            paypalDisclaimer.style.display = 'none';
+            bitcoin.style.display = 'block';
+            break;
+
+        default:
+            creditCardForm.style.display = 'block';
+            paypalDisclaimer.style.display = 'none';
+            bitcoin.style.display = 'none';
+            break;
+    }
+})
 
 
 
