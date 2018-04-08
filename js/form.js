@@ -6,6 +6,7 @@ const selectDesign = document.getElementById('design');
 const selectColor = document.getElementById('color');
 const colorOption = document.querySelectorAll('#color option');
 const paymentSelect = document.getElementById('payment');
+const paymentSelectOption = document.querySelectorAll("#payment option");
 const paypalDisclaimer = document.getElementById('paypal');
 const bitcoinDisclaimer = document.getElementById('bitcoin');
 const creditCardForm = document.getElementById('credit-card');
@@ -15,6 +16,7 @@ const heartOptionArray = [];
 const activitiesFieldset = document.querySelector('.activities');
 const activitiesLabel = document.querySelectorAll('.activities label');
 const activitiesCheckboxes = document.querySelectorAll('.activities input[type="checkbox"]');
+const submitFormButton = document.querySelector('button[type="submit"]');
 const checkedBoxes = [];
 let total = 0;
 
@@ -24,6 +26,10 @@ const activityDayRegEx = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sun
 const activityStartingHourRegEx = /(.am-)|(.pm-)/ig;
 const activityEndingHourRegEx = /(-.*\pm)/ig;
 const activityPriceRegEx = /(?:[^\$]*)$/ig;
+const validEmailRegEx = /^[a-z0-9](\.?[a-z0-9_-]){0,}@[a-z0-9-]+\.([a-z]{1,6}\.)?[a-z]{2,6}$/g;
+const ccNumberRegEx = /\d{16}/g;
+const zipRegEx = /\d{5}/g;
+const cvvRegEx = /\d{3}/g;
 
 // On document fully loaded do what's below
 document.addEventListener('DOMContentLoaded', function(event) {
@@ -33,12 +39,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
     selectColorPlaceholder.selected = 'selected';
     selectColorPlaceholder.className = 'placeholder';
     selectColor.appendChild(selectColorPlaceholder);
-    for(var i = 0; i < colorOption.length; i += 1) {
+    for(let i = 0; i < colorOption.length; i += 1) {
         colorOption[i].style.display = 'none';
     }
     colorDropdownMenu.style.display = 'none';
     paypalDisclaimer.style.display = 'none';
     bitcoinDisclaimer.style.display = 'none';
+    otherTitleInput.style.display = 'none';
 })
 
 function pricingDiv (total) {
@@ -78,7 +85,7 @@ function add(number) {
      return pricingDiv(total);
  }
 
-for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
+for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
     activitiesCheckboxes[i].addEventListener('change', (e) => {
         let activityText = e.target.parentNode.textContent;
         let activityName = activityNameRegEx.test(activityText) ? activityText.match(activityNameRegEx).toString() : '';
@@ -88,7 +95,7 @@ for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
         let activityPrice = activityPriceRegEx.test(activityText) ? parseInt(activityText.match(activityPriceRegEx)) : '';
 
         if(e.target.checked) {
-            for(var i = 0; i < activitiesLabel.length; i += 1) {
+            for(let i = 0; i < activitiesLabel.length; i += 1) {
                 if(activitiesLabel[i].textContent.includes(activityStartingHour) && activityStartingHour != ""){
                         activitiesLabel[i].firstChild.disabled = true;
                         activitiesLabel[i].style.color = 'gray';
@@ -98,7 +105,7 @@ for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
             }
             add(activityPrice);
         } else {
-            for(var i = 0; i < activitiesLabel.length; i += 1) {
+            for(let i = 0; i < activitiesLabel.length; i += 1) {
                 activitiesLabel[i].style.color = '';
                 activitiesLabel[i].firstChild.disabled = false;
             }
@@ -107,7 +114,7 @@ for(var i = 0; i < activitiesCheckboxes.length; i += 1) {
     });
 };
 
-for(var i = 0; i < colorOption.length; i += 1) {
+for(let i = 0; i < colorOption.length; i += 1) {
     if(colorOption[i].textContent.includes('JS Puns')) {
         punsOptionArray.push(colorOption[i]);
     } else if (colorOption[i].textContent.includes('I ♥ JS')) {
@@ -120,9 +127,9 @@ selectTitle.addEventListener('change', (e) => {
     const selectedOption = e.target.selectedOptions[0].value;    
     // Detect if selected is other & display text field with id "other-title" and placeholder "Your Job Role"
     if(selectedOption === 'other') {
-        otherTitleInput.className = '';
+        otherTitleInput.style.display = 'block';
     } else {
-        otherTitleInput.className = 'is-hidden';
+        otherTitleInput.style.display = 'none';
     }
 });
 
@@ -139,22 +146,22 @@ selectDesign.addEventListener('click', (e) => {
 
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
     if(selectedOption === 'js puns') {
-        for(var i = 0; i < punsOptionArray.length; i += 1) {
+        for(let i = 0; i < punsOptionArray.length; i += 1) {
             punsOptionArray[i].style.display = 'block';
         }
     } else {
-        for(var i = 0; i < punsOptionArray.length; i += 1) {
+        for(let i = 0; i < punsOptionArray.length; i += 1) {
             punsOptionArray[i].style.display = 'none';
         }
     }
 
     // If the user selects "Theme - I ♥ JS" then the color menu should only display "Tomato," "Steel Blue," and "Dim Grey."
     if(selectedOption === 'heart js') {
-        for(var i = 0; i < heartOptionArray.length; i += 1) {
+        for(let i = 0; i < heartOptionArray.length; i += 1) {
             heartOptionArray[i].style.display = 'block';
         }
     } else {
-        for(var i = 0; i < heartOptionArray.length; i += 1) {
+        for(let i = 0; i < heartOptionArray.length; i += 1) {
             heartOptionArray[i].style.display = 'none';
         }
     }
@@ -186,7 +193,38 @@ paymentSelect.addEventListener("change", (e) => {
             bitcoin.style.display = 'none';
             break;
     }
-})
+});
+
+//Form validation
+submitFormButton.addEventListener('click', (e) => {
+    const name = document.getElementById('name');
+    const email = document.getElementById('mail');
+    const creditCardOption = document.querySelector('#payment option[value="credit card"]');
+    let hasCheckedBox = false;
+
+    let ccNumber = document.getElementById("cc-num");
+    let zip = document.getElementById("zip");
+    let cvv = document.getElementById("cvv");
+
+    for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
+        if(activitiesCheckboxes[i].checked === true) {
+            hasCheckedBox = true;
+        }
+    }
+
+    if(name.value === '' || !email.value.match(validEmailRegEx) || hasCheckedBox === false) {
+        e.preventDefault();
+    } else {        
+        if(creditCardOption.checked = true) {
+            let ccNumber = document.getElementById("cc-num");
+            let zip = document.getElementById("zip");
+            let cvv = document.getElementById("cvv");
+            if(!(ccNumber.value.match(ccNumberRegEx) && zip.value.match(zipRegEx) && cvv.value.match(cvvRegEx))) {
+                e.preventDefault();
+            } 
+        }
+    }
+});
 
 
 
