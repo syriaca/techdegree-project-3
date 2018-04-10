@@ -11,12 +11,18 @@ const paypalDisclaimer = document.getElementById('paypal');
 const bitcoinDisclaimer = document.getElementById('bitcoin');
 const creditCardForm = document.getElementById('credit-card');
 const colorDropdownMenu = document.getElementById('colors-js-puns');
-const punsOptionArray = [];
-const heartOptionArray = [];
 const activitiesFieldset = document.querySelector('.activities');
 const activitiesLabel = document.querySelectorAll('.activities label');
 const activitiesCheckboxes = document.querySelectorAll('.activities input[type="checkbox"]');
 const submitFormButton = document.querySelector('button[type="submit"]');
+const name = document.getElementById('name');
+const email = document.getElementById('mail');
+const creditCardOption = document.querySelector('#payment option[value="credit card"]');
+const ccNumber = document.getElementById("cc-num");
+const zip = document.getElementById("zip");
+const cvv = document.getElementById("cvv");
+const punsOptionArray = [];
+const heartOptionArray = [];
 const checkedBoxes = [];
 let total = 0;
 
@@ -31,23 +37,7 @@ const ccNumberRegEx = /\d{16}/g;
 const zipRegEx = /\d{5}/g;
 const cvvRegEx = /\d{3}/g;
 
-// On document fully loaded do what's below
-document.addEventListener('DOMContentLoaded', function(event) {
-    nameInput.focus();
-    const selectColorPlaceholder = document.createElement('option');
-    selectColorPlaceholder.textContent = 'Please select a T-shirt theme';
-    selectColorPlaceholder.selected = 'selected';
-    selectColorPlaceholder.className = 'placeholder';
-    selectColor.appendChild(selectColorPlaceholder);
-    for(let i = 0; i < colorOption.length; i += 1) {
-        colorOption[i].style.display = 'none';
-    }
-    colorDropdownMenu.style.display = 'none';
-    paypalDisclaimer.style.display = 'none';
-    bitcoinDisclaimer.style.display = 'none';
-    otherTitleInput.style.display = 'none';
-})
-
+// Function to add pricing div to HTML
 function pricingDiv (total) {
     let pricingDivHtml = '';
     pricingDivHtml = document.createElement('div');
@@ -68,23 +58,52 @@ function pricingDiv (total) {
     }
 }
 
+// Function to create paymenthtml div
 function paymentDiv(paymentOption){
     let paymentDivHtml = '';
     paymentDivHtml = document.createElement('div');
     paymentDivHtml.id = 'totalPrice';
-
 }
 
+ // Simple addition function
 function add(number) {
     total += number;
     return pricingDiv(total);
  }
  
+ // Simple substraction function
  function substract(number) {
      total -= number;
      return pricingDiv(total);
  }
 
+// Function to display an error message
+function errorMessage(element, text) {
+    let errorMessage = document.createElement('span');
+    errorMessage.className = 'error'
+    errorMessage.textContent = text;
+    element.previousElementSibling.appendChild(errorMessage);
+}
+
+// On document fully loaded do what's below
+document.addEventListener('DOMContentLoaded', function(event) {
+    let errorMessages = document.querySelectorAll('.error');
+    nameInput.focus();
+    const selectColorPlaceholder = document.createElement('option');
+    selectColorPlaceholder.textContent = 'Please select a T-shirt theme';
+    selectColorPlaceholder.selected = 'selected';
+    selectColorPlaceholder.className = 'placeholder';
+    selectColor.appendChild(selectColorPlaceholder);
+    for(let i = 0; i < colorOption.length; i += 1) {
+        colorOption[i].style.display = 'none';
+    }
+    colorDropdownMenu.style.display = 'none';
+    paypalDisclaimer.style.display = 'none';
+    bitcoinDisclaimer.style.display = 'none';
+    otherTitleInput.style.display = 'none';
+});
+
+ // Get activity information according regular expressions and add or substract total for activity price
 for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
     activitiesCheckboxes[i].addEventListener('change', (e) => {
         let activityText = e.target.parentNode.textContent;
@@ -114,6 +133,7 @@ for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
     });
 };
 
+// Create arrays according to color options
 for(let i = 0; i < colorOption.length; i += 1) {
     if(colorOption[i].textContent.includes('JS Puns')) {
         punsOptionArray.push(colorOption[i]);
@@ -133,7 +153,7 @@ selectTitle.addEventListener('change', (e) => {
     }
 });
 
-// Select color options
+// Select color options event listener
 selectDesign.addEventListener('click', (e) => {
     const selectedOption = e.target.selectedOptions[0].value;  
 
@@ -197,15 +217,8 @@ paymentSelect.addEventListener("change", (e) => {
 
 //Form validation scripting
 submitFormButton.addEventListener('click', (e) => {
-    const name = document.getElementById('name');
-    const email = document.getElementById('mail');
-    const creditCardOption = document.querySelector('#payment option[value="credit card"]');
     let errorMessages = document.querySelectorAll('.error');
     let hasCheckedBox = false;
-
-    let ccNumber = document.getElementById("cc-num");
-    let zip = document.getElementById("zip");
-    let cvv = document.getElementById("cvv");
 
     if(errorMessages.length != 0) {
         errorMessages.forEach(errorMessages => {
@@ -221,21 +234,17 @@ submitFormButton.addEventListener('click', (e) => {
 
     if(name.value === '' || !email.value.match(validEmailRegEx) || hasCheckedBox === false) {
         if(name.value === '') {
-            let errorMessage = document.createElement('span');
-            errorMessage.className = 'error'
-            errorMessage.textContent = 'You must fill the name input before submitting form';
-            name.previousElementSibling.appendChild(errorMessage);
+            errorMessage(name, 'You must fill the name input before submitting form');
         }
 
-        if(!email.value.match(validEmailRegEx)) {
-            let errorMessage = document.createElement('span');
-            errorMessage.className = 'error'
-            errorMessage.textContent = 'You must fill a valid email';
-            email.previousElementSibling.appendChild(errorMessage);
+        if(email.value === "") {
+            errorMessage(email, 'An email adress is needed !');
+        } else if(email.value.match(validEmailRegEx)) {
+            errorMessage(email, 'You must fill a valid adress email');
         }
 
-        if(hasCheckedBox === false) {
-            const fieldsetHeading = activitiesFieldset.firstElementChild;
+        if(hasCheckedBox === false) {            
+            const fieldsetHeading = activitiesFieldset.firstElementChild;            
             let errorMessage = document.createElement('span');
             errorMessage.className = 'error'
             errorMessage.textContent = 'You must register for an activity';
@@ -245,33 +254,33 @@ submitFormButton.addEventListener('click', (e) => {
     }     
 
     if(creditCardOption.checked = true) {
-        let ccNumber = document.getElementById("cc-num");
-        let zip = document.getElementById("zip");
-        let cvv = document.getElementById("cvv");
-        console.log(zip.value.match(zipRegEx));
         if(!(ccNumber.value.match(ccNumberRegEx) && zip.value.match(zipRegEx) && cvv.value.match(cvvRegEx))) {
             if(!ccNumber.value.match(ccNumberRegEx)) {
-                let errorMessage = document.createElement('span');
-                errorMessage.className = 'error'
-                errorMessage.textContent = 'You must fill a valid credit card number';
-                ccNumber.previousElementSibling.appendChild(errorMessage);
+                errorMessage(ccNumber, 'You must fill a valid credit card number');
             }
             if(!zip.value.match(zipRegEx)) {
-                let errorMessage = document.createElement('span');
-                errorMessage.className = 'error'
-                errorMessage.textContent = 'You must fill a zip';
-                zip.previousElementSibling.appendChild(errorMessage);
+                errorMessage(zip, 'You must fill a zip');
             }
             if(!cvv.value.match(cvvRegEx)) {
-                let errorMessage = document.createElement('span');
-                errorMessage.className = 'error'
-                errorMessage.textContent = 'You must fill a CVV';
-                cvv.previousElementSibling.appendChild(errorMessage);
+                errorMessage(cvv, 'You must fill a CVV');
             }
             e.preventDefault();
         } 
+    }    
+});
+
+// Form validation scripting on keyup
+email.addEventListener('keyup', (e)=> {
+    if(!email.value.match(validEmailRegEx)) {
+        if(!email.previousElementSibling.firstElementChild) {
+            errorMessage(email, 'You must fill a valid email adress');
+        }
+    } else {
+        if(email.previousElementSibling.firstElementChild) {
+            let removeChild = email.previousElementSibling.firstElementChild;
+            email.previousElementSibling.removeChild(removeChild);
+        }
     }
-    
 });
 
 
