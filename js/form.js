@@ -200,11 +200,18 @@ submitFormButton.addEventListener('click', (e) => {
     const name = document.getElementById('name');
     const email = document.getElementById('mail');
     const creditCardOption = document.querySelector('#payment option[value="credit card"]');
+    let errorMessages = document.querySelectorAll('.error');
     let hasCheckedBox = false;
 
     let ccNumber = document.getElementById("cc-num");
     let zip = document.getElementById("zip");
     let cvv = document.getElementById("cvv");
+
+    if(errorMessages.length != 0) {
+        errorMessages.forEach(errorMessages => {
+            errorMessages.parentNode.removeChild(errorMessages);
+        })
+    }
 
     for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
         if(activitiesCheckboxes[i].checked === true) {
@@ -213,13 +220,11 @@ submitFormButton.addEventListener('click', (e) => {
     }
 
     if(name.value === '' || !email.value.match(validEmailRegEx) || hasCheckedBox === false) {
-        if(errorMessage) {
+        if(name.value === '') {
             let errorMessage = document.createElement('span');
             errorMessage.className = 'error'
             errorMessage.textContent = 'You must fill the name input before submitting form';
             name.previousElementSibling.appendChild(errorMessage);
-        } else {
-            name.previousElementSibling.removeChild(document.querySelector('.error'));
         }
 
         if(!email.value.match(validEmailRegEx)) {
@@ -227,20 +232,46 @@ submitFormButton.addEventListener('click', (e) => {
             errorMessage.className = 'error'
             errorMessage.textContent = 'You must fill a valid email';
             email.previousElementSibling.appendChild(errorMessage);
-        } else {
-            email.previousElementSibling.removeChild(document.querySelector('.error'));
+        }
+
+        if(hasCheckedBox === false) {
+            const fieldsetHeading = activitiesFieldset.firstElementChild;
+            let errorMessage = document.createElement('span');
+            errorMessage.className = 'error'
+            errorMessage.textContent = 'You must register for an activity';
+            fieldsetHeading.appendChild(errorMessage);
         }
         e.preventDefault();
-    } else {        
-        if(creditCardOption.checked = true) {
-            let ccNumber = document.getElementById("cc-num");
-            let zip = document.getElementById("zip");
-            let cvv = document.getElementById("cvv");
-            if(!(ccNumber.value.match(ccNumberRegEx) && zip.value.match(zipRegEx) && cvv.value.match(cvvRegEx))) {
-                e.preventDefault();
-            } 
-        }
+    }     
+
+    if(creditCardOption.checked = true) {
+        let ccNumber = document.getElementById("cc-num");
+        let zip = document.getElementById("zip");
+        let cvv = document.getElementById("cvv");
+        console.log(zip.value.match(zipRegEx));
+        if(!(ccNumber.value.match(ccNumberRegEx) && zip.value.match(zipRegEx) && cvv.value.match(cvvRegEx))) {
+            if(!ccNumber.value.match(ccNumberRegEx)) {
+                let errorMessage = document.createElement('span');
+                errorMessage.className = 'error'
+                errorMessage.textContent = 'You must fill a valid credit card number';
+                ccNumber.previousElementSibling.appendChild(errorMessage);
+            }
+            if(!zip.value.match(zipRegEx)) {
+                let errorMessage = document.createElement('span');
+                errorMessage.className = 'error'
+                errorMessage.textContent = 'You must fill a zip';
+                zip.previousElementSibling.appendChild(errorMessage);
+            }
+            if(!cvv.value.match(cvvRegEx)) {
+                let errorMessage = document.createElement('span');
+                errorMessage.className = 'error'
+                errorMessage.textContent = 'You must fill a CVV';
+                cvv.previousElementSibling.appendChild(errorMessage);
+            }
+            e.preventDefault();
+        } 
     }
+    
 });
 
 
