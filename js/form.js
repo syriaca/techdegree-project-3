@@ -195,7 +195,7 @@ paymentSelect.addEventListener("change", (e) => {
     }
 });
 
-//Form validation
+//Form validation scripting
 submitFormButton.addEventListener('click', (e) => {
     const name = document.getElementById('name');
     const email = document.getElementById('mail');
@@ -213,6 +213,23 @@ submitFormButton.addEventListener('click', (e) => {
     }
 
     if(name.value === '' || !email.value.match(validEmailRegEx) || hasCheckedBox === false) {
+        if(errorMessage) {
+            let errorMessage = document.createElement('span');
+            errorMessage.className = 'error'
+            errorMessage.textContent = 'You must fill the name input before submitting form';
+            name.previousElementSibling.appendChild(errorMessage);
+        } else {
+            name.previousElementSibling.removeChild(document.querySelector('.error'));
+        }
+
+        if(!email.value.match(validEmailRegEx)) {
+            let errorMessage = document.createElement('span');
+            errorMessage.className = 'error'
+            errorMessage.textContent = 'You must fill a valid email';
+            email.previousElementSibling.appendChild(errorMessage);
+        } else {
+            email.previousElementSibling.removeChild(document.querySelector('.error'));
+        }
         e.preventDefault();
     } else {        
         if(creditCardOption.checked = true) {
