@@ -257,7 +257,7 @@ submitFormButton.addEventListener('click', (e) => {
         e.preventDefault();
     }     
 
-    if(creditCardOption.checked = true) {
+    if(creditCardOption.checked = true && creditCardForm.style.display != 'none') {
         if(!(ccNumber.value.match(ccNumberRegEx) && zip.value.match(zipRegEx) && cvv.value.match(cvvRegEx))) {
             if(!ccNumber.value.match(ccNumberRegEx)) {
                 errorMessage(ccNumber, 'You must fill a valid credit card number');
