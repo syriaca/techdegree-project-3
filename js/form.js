@@ -115,7 +115,7 @@ for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
 
         if(e.target.checked) {
             for(let i = 0; i < activitiesLabel.length; i += 1) {
-                if(activitiesLabel[i].textContent.includes(activityStartingHour) && activityStartingHour != ""){
+                if(activitiesLabel[i].textContent.includes(activityStartingHour) && activitiesLabel[i].textContent.includes(activityDay) && activityStartingHour != ""){
                         activitiesLabel[i].firstChild.disabled = true;
                         activitiesLabel[i].style.color = 'gray';
                         e.target.disabled = false;
@@ -166,7 +166,6 @@ selectDesign.addEventListener('click', (e) => {
 
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
     if(selectedOption === 'js puns') {
-        console.log('js puns');
         for(let i = 0; i < punsOptionArray.length; i += 1) {
             punsOptionArray[i].style.display = 'block';
             punsOptionArray[0].selected = true;
@@ -179,13 +178,12 @@ selectDesign.addEventListener('click', (e) => {
 
     // If the user selects "Theme - I ♥ JS" then the color menu should only display "Tomato," "Steel Blue," and "Dim Grey."
     if(selectedOption === 'heart js') {
-        console.log('heart js');
         for(let i = 0; i < heartOptionArray.length; i += 1) {
             heartOptionArray[i].style.display = 'block';
             heartOptionArray[0].selected = true;
         }
     } else {
-        for(let i = 0; i < heartOptionArray.length; i += 1) {
+        for(let i = 0; i < heartOptionArray.length; i += 1) {c
             heartOptionArray[i].style.display = 'none';
             const selectColorPlaceholder = document.querySelector(".placeholder");
             selectColorPlaceholder.style.display = 'none';
