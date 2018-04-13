@@ -183,7 +183,7 @@ selectDesign.addEventListener('click', (e) => {
             heartOptionArray[0].selected = true;
         }
     } else {
-        for(let i = 0; i < heartOptionArray.length; i += 1) {c
+        for(let i = 0; i < heartOptionArray.length; i += 1) {
             heartOptionArray[i].style.display = 'none';
             const selectColorPlaceholder = document.querySelector(".placeholder");
             selectColorPlaceholder.style.display = 'none';
