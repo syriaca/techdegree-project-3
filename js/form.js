@@ -90,14 +90,14 @@ document.addEventListener('DOMContentLoaded', function(event) {
     let errorMessages = document.querySelectorAll('.error');
     nameInput.focus();
     const selectColorPlaceholder = document.createElement('option');
-    selectColorPlaceholder.textContent = 'Please select a T-shirt theme';
+    selectColorPlaceholder.textContent = '<---- Please select a T-shirt theme';
     selectColorPlaceholder.selected = 'selected';
     selectColorPlaceholder.className = 'placeholder';
     selectColor.appendChild(selectColorPlaceholder);
     for(let i = 0; i < colorOption.length; i += 1) {
         colorOption[i].style.display = 'none';
     }
-    colorDropdownMenu.style.display = 'none';
+    // colorDropdownMenu.style.display = 'none';
     paypalDisclaimer.style.display = 'none';
     bitcoinDisclaimer.style.display = 'none';
     otherTitleInput.style.display = 'none';
@@ -158,14 +158,7 @@ selectTitle.addEventListener('change', (e) => {
 
 // Select color options event listener
 selectDesign.addEventListener('click', (e) => {
-    const selectedOption = e.target.selectedOptions[0].value;  
-
-    // Dropdown color menu is shown when a design is selected
-    if(selectedOption === 'js puns' || selectedOption === 'heart js') {
-        colorDropdownMenu.style.display = 'block';
-    } else {
-        colorDropdownMenu.style.display = 'none';
-    }
+    const selectedOption = e.target.selectedOptions[0].value; 
 
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
     if(selectedOption === 'js puns') {
