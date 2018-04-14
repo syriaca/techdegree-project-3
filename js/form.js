@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     otherTitleInput.style.display = 'none';
 });
 
+
  // Get activity information according regular expressions and add or substract total for activity price
 for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
     activitiesCheckboxes[i].addEventListener('change', (e) => {
@@ -113,7 +114,7 @@ for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
         let activityEndingHour = activityEndingHourRegEx.test(activityText) ? activityText.match(activityEndingHourRegEx).toString() : '';
         let activityPrice = activityPriceRegEx.test(activityText) ? parseInt(activityText.match(activityPriceRegEx)) : '';
 
-        if(e.target.checked) {
+        if(e.target.checked == true) {
             for(let i = 0; i < activitiesLabel.length; i += 1) {
                 if(activitiesLabel[i].textContent.includes(activityStartingHour) && activitiesLabel[i].textContent.includes(activityDay) && activityStartingHour != ""){
                         activitiesLabel[i].firstChild.disabled = true;
@@ -125,8 +126,10 @@ for(let i = 0; i < activitiesCheckboxes.length; i += 1) {
             add(activityPrice);
         } else {
             for(let i = 0; i < activitiesLabel.length; i += 1) {
-                activitiesLabel[i].style.color = '';
-                activitiesLabel[i].firstChild.disabled = false;
+                if(activitiesLabel[i].textContent.includes(activityStartingHour) && activitiesLabel[i].textContent.includes(activityDay) && activityStartingHour != ""){
+                    activitiesLabel[i].style.color = '';
+                    activitiesLabel[i].firstChild.disabled = false;
+                }
             }
             substract(activityPrice);
         }
