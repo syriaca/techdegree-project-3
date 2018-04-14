@@ -33,9 +33,9 @@ const activityStartingHourRegEx = /(.am-)|(.pm-)/ig;
 const activityEndingHourRegEx = /(-.*\pm)/ig;
 const activityPriceRegEx = /(?:[^\$]*)$/ig;
 const validEmailRegEx = /^[a-z0-9](\.?[a-z0-9_-]){0,}@[a-z0-9-]+\.([a-z]{1,6}\.)?[a-z]{2,6}$/g;
-const ccNumberRegEx = /\d{16}/g;
-const zipRegEx = /\d{5}/g;
-const cvvRegEx = /\d{3}/g;
+const ccNumberRegEx = /^\d{13,16}$/g;
+const zipRegEx = /^\d{5}$/g;
+const cvvRegEx = /^\d{3}$/g;
 
 // Function to add pricing div to HTML
 function pricingDiv (total) {
