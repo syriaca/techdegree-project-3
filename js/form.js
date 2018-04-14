@@ -33,9 +33,9 @@ const activityStartingHourRegEx = /(.am-)|(.pm-)/ig;
 const activityEndingHourRegEx = /(-.*\pm)/ig;
 const activityPriceRegEx = /(?:[^\$]*)$/ig;
 const validEmailRegEx = /^[a-z0-9](\.?[a-z0-9_-]){0,}@[a-z0-9-]+\.([a-z]{1,6}\.)?[a-z]{2,6}$/g;
-const ccNumberRegEx = /\d{16}/g;
-const zipRegEx = /\d{5}/g;
-const cvvRegEx = /\d{3}/g;
+const ccNumberRegEx = /^\d{13,16}$/g;
+const zipRegEx = /^\d{5}$/g;
+const cvvRegEx = /^\d{3}$/g;
 
 // Function to add pricing div to HTML
 function pricingDiv (total) {
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     let errorMessages = document.querySelectorAll('.error');
     nameInput.focus();
     const selectColorPlaceholder = document.createElement('option');
-    selectColorPlaceholder.textContent = 'Please select a T-shirt theme';
+    selectColorPlaceholder.textContent = '<---- Please select a T-shirt theme';
     selectColorPlaceholder.selected = 'selected';
     selectColorPlaceholder.className = 'placeholder';
     selectColor.appendChild(selectColorPlaceholder);
@@ -158,14 +158,15 @@ selectTitle.addEventListener('change', (e) => {
 
 // Select color options event listener
 selectDesign.addEventListener('click', (e) => {
-    const selectedOption = e.target.selectedOptions[0].value;  
-
+    const selectedOption = e.target.selectedOptions[0].value; 
+    
     // Dropdown color menu is shown when a design is selected
     if(selectedOption === 'js puns' || selectedOption === 'heart js') {
         colorDropdownMenu.style.display = 'block';
     } else {
         colorDropdownMenu.style.display = 'none';
     }
+
 
     // If the user selects "Theme - JS Puns" then the color menu should only display "Cornflower Blue," "Dark Slate Grey," and "Gold."
     if(selectedOption === 'js puns') {
@@ -289,7 +290,6 @@ email.addEventListener('keyup', (e)=> {
         }
     }
 });
-
 
 
 
