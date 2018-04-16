@@ -157,7 +157,7 @@ selectTitle.addEventListener('change', (e) => {
 });
 
 // Select color options event listener
-selectDesign.addEventListener('click', (e) => {
+selectDesign.addEventListener('change', (e) => {
     const selectedOption = e.target.selectedOptions[0].value; 
     
     // Dropdown color menu is shown when a design is selected
